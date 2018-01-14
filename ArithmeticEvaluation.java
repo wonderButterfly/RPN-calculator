@@ -44,6 +44,8 @@ public final class ArithmeticEvaluation {
     public interface Expressions {
         double evaluate();
     }
+    
+    public enum Separator {LPAREN,COMMA}
 
     public static final class Operator implements Expressions{
 
@@ -78,6 +80,14 @@ public final class ArithmeticEvaluation {
             public int getPrecedence() {
                 return precedence;
             }
+            
+            public boolean isUnary() {
+                return !binary;
+            }
+            
+            public boolean isBinary() {
+                return !isUnary();
+            }
 
             @Override
             public String toString() {
@@ -98,7 +108,7 @@ public final class ArithmeticEvaluation {
         }
 
         public Operator(OperatorType type) {
-            this(type, new double[0]);
+            this(type, new double[2]);
         }
 
         @Override
@@ -245,7 +255,7 @@ public final class ArithmeticEvaluation {
         MOD('%', 2, true),
         FACT('!', 3, false),
         PLUS('+', 4, false),
-        NEGATE('-', 4, false); // ++ PLUS_PLUS, +- PLUS_MINUS, -- MINUS_MINUS, -+ MINUS_PLUS
+        NEGATE('-', 4, false); // ++ PLUS_PLUS, +- PLUS_MINUS, -- MINUS_MINUS, -+ MINUS_PLUS, ** STARSTAR
 
         private final char symbol;
         private final int precedence;
