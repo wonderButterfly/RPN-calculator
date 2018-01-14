@@ -2,6 +2,7 @@ import java.util.*;
 import java.util.stream.*;
 import java.util.function.*;
 
+import static java.util.Map.entry;
 /**
  *
  * @author d_Ar
@@ -11,11 +12,7 @@ public final class ArithmeticEvaluation {
     private final static Map<String, Double> USES_CONSTANTS;
 
     static {
-        USES_CONSTANTS = new HashMap<>();
-        USES_CONSTANTS.put("e", Math.E);
-        USES_CONSTANTS.put("pi", Math.PI);
-        USES_CONSTANTS.put("E", Math.E);
-        USES_CONSTANTS.put("PI", Math.PI);
+        USES_CONSTANTS = Map.ofEntries(("e", Math.E),("pi", Math.PI),("E", Math.E),("PI", Math.PI));
     }
 
     private final static String ALLOWED_OPERATOR_CHARS = "+-*/%!";
@@ -31,8 +28,8 @@ public final class ArithmeticEvaluation {
     public ArithmeticEvaluation(final String input) {
         this.input = input.replaceAll(" ","");
         this.length = this.input.length();
-        buff = new StringBuilder();
-        pos = 0;
+        this.buff = new StringBuilder();
+        this.pos = 0;
     }
 
     public interface Expression {
@@ -51,7 +48,7 @@ public final class ArithmeticEvaluation {
 
         public enum OperatorType {
 
-            ADD('+', 1, true) {
+            ADD ('+', 1, true) {
                 @Override
                 public void matchArguments(int size) {
 
@@ -130,13 +127,15 @@ public final class ArithmeticEvaluation {
                     "(" + args[0] + " " + type.getSymbol() + " " + args[1] + ")" :
                     "(" + type.getSymbol() + args[0]  + ")";
         }
+        
     }
 
     public static final class Function implements Expressions{
 
         public enum FunctionType {
-
-            SIN("sin", true) {
+            
+            // basic functions
+            SIN ("sin", true) {
                 @Override
                 public void matchArguments(int size) {
                     if (size != 1) throw new IllegalArgumentException();
@@ -148,7 +147,7 @@ public final class ArithmeticEvaluation {
                 }
             },
 
-            COS("cos", true) {
+            COS ("cos", true) {
                 @Override
                 public void matchArguments(int size) {
                     if (size != 1) throw new IllegalArgumentException();
@@ -160,7 +159,7 @@ public final class ArithmeticEvaluation {
                 }
             },
 
-            POW("pow", false) {
+            POW ("pow", false) {
                 @Override
                 public void matchArguments(int size) {
                     if (size != 2) throw new IllegalArgumentException();
@@ -246,16 +245,7 @@ public final class ArithmeticEvaluation {
 
     public enum OperatorType implements Expression {
 
-        LPAREN('(', 0, false),
-        COMMA(',', 0, true),
-        ADD('+', 1, true),
-        SUB('-', 1, true),
-        MUL('*', 2, true),
-        DIV('/', 2, true),
-        MOD('%', 2, true),
-        FACT('!', 3, false),
-        PLUS('+', 4, false),
-        NEGATE('-', 4, false); // ++ PLUS_PLUS, +- PLUS_MINUS, -- MINUS_MINUS, -+ MINUS_PLUS, ** STARSTAR
+        LPAREN('(', 0, false),COMMA(',', 0, true),ADD('+', 1, true),SUB('-', 1, true),MUL('*', 2, true),DIV('/', 2, true),MOD('%', 2, true),FACT('!', 3, false),PLUS('+', 4, false),NEGATE('-', 4, false); // ++ PLUS_PLUS, +- PLUS_MINUS, -- MINUS_MINUS, -+ MINUS_PLUS, ** STARSTAR
 
         private final char symbol;
         private final int precedence;
@@ -319,16 +309,7 @@ public final class ArithmeticEvaluation {
 
     public enum FunctionType implements Expression {
 
-        SIN("sin", true),
-        COS("cos", true),
-        TAN("tg", true),
-        CTAN("ctg", true),
-        SQRT("sqrt", true),
-        POWER("pow", false),
-        LOG("log", false),
-        ABS("abs", true),
-        MIN("min", false),
-        MAX("max", false);
+        SIN("sin", true),COS("cos", true),TAN("tg", true),CTAN("ctg", true),SQRT("sqrt", true),POWER("pow", false),LOG("log", false),ABS("abs", true),MIN("min", false),MAX("max", false);
 
         private final String name;
         private final boolean unary;
