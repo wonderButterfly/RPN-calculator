@@ -7,12 +7,13 @@ import static java.util.Map.entry;
  *
  * @author d_Ar
  */
-public final class ArithmeticEvaluation {
+
+public class ArithmeticEvaluation {
 
     private final static Map<String, Double> USES_CONSTANTS;
 
     static {
-        USES_CONSTANTS = Map.ofEntries(("e", Math.E),("pi", Math.PI),("E", Math.E),("PI", Math.PI));
+        USES_CONSTANTS = Map.ofEntries(("e", Math.E),("pi", Math.PI),("E", Math.E),("PI", Math.PI),("π",Math.PI));
     }
 
     private final static String ALLOWED_OPERATOR_CHARS = "+-*/%!";
@@ -84,6 +85,13 @@ public final class ArithmeticEvaluation {
             
             public boolean isBinary() {
                 return !isUnary();
+            }
+            
+            public static OperatorType forOperator(char symbol, boolean statement) throws Exception{
+                for (OperatorType type : values()) {
+                    if (type.getSymbol() == symbol && type.isUnary() == statement) return type;
+                }
+                throw new RuntimeException();
             }
 
             @Override
