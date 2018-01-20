@@ -317,13 +317,15 @@ public class ArithmeticEvaluation {
 
     public enum FunctionType implements Expression {
 
-        SIN("sin", true),COS("cos", true),TAN("tg", true),CTAN("ctg", true),SQRT("sqrt", true),POWER("pow", false),LOG("log", false),ABS("abs", true),MIN("min", false),MAX("max", false);
+        SIN("sin", x -> Math.sin(x[0]), true),COS("cos", true),TAN("tg", true),CTAN("ctg", true),SQRT("sqrt", true),POWER("pow", false),LOG("log", false),ABS("abs", true),MIN("min", false),MAX("max", false);
 
         private final String name;
+        private final Function<double[], Double> function;
         private final boolean unary;
-
-        FunctionType(String name, boolean unary) {
+        
+        FunctionType(String name, Function<double[], Double> function, boolean unary) {
             this.name = name;
+            this.function = function;
             this.unary = unary;
         }
 
